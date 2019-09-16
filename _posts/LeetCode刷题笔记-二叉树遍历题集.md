@@ -1,3 +1,12 @@
+---
+layout: post
+title: "LeetCode 解题笔记"
+subtitle: ''
+author: "Liuyun"
+header-style: text
+tags:
+  - Vim
+---
 LeetCode刷题笔记
 
 二叉树遍历：
