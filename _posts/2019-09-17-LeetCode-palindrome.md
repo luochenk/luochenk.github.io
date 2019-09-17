@@ -1,19 +1,8 @@
----
-layout: post
-title: "LeetCode 解题笔记"
-subtitle: ''
-author: "Liuyun"
-header-style: text
-tags:
-  - LeetCode
----
 LeetCode刷题笔记 - 回文串相关：
 
-给定字符串中的字符能构成的最长回文串：
+1.求给定字符串中的字符能构成的最长回文串：  https://leetcode-cn.com/problems/longest-palindrome/submissions/
 
-https://leetcode-cn.com/problems/longest-palindrome/submissions/
-
-遍历字符串，若有偶数个相同字符（2n)，直接加上2n，有大于1的奇数字符（2n +1），加上2n，维护一个标志位flag，表示不是全为偶数个字符
+​      遍历字符串，若有偶数个相同字符（2n)，直接加上2n，有大于1的奇数字符（2n +1），加上2n，维护一个标志位flag，表示不是全为偶数个字符
 
 ```java
 class Solution {
@@ -44,11 +33,9 @@ class Solution {
 }
 ```
 
-https://leetcode-cn.com/problems/longest-palindromic-substring/
+2.最长回文子串：https://leetcode-cn.com/problems/longest-palindromic-substring/
 
-最长回文子串：
-
-考虑从每个i位置从两边延伸能够达到的满足回文子串的最大长度，并在过程中维护最大长度的start、end索引。
+​       考虑从每个i位置从两边延伸能够达到的满足回文子串的最大长度，并在过程中维护最大长度的start、end索引。
 
 ```java
 class Solution {
@@ -74,6 +61,66 @@ class Solution {
         }
         return j - i - 1;//i、j不包含在回文子串中，所以为j - i - 2 + 1
     }
+}
+```
+
+3.回文字符串的数量：https://leetcode-cn.com/problems/palindromic-substrings/
+
+​        中心扩展法：由每一个字符串向两边扩展。能扩展就表示找到了一个回文串。中心字符串不同则回文字符串起始位置或结束位置一定不同，由题意是不同的回文串。
+
+```java
+class Solution {
+    public int countSubstrings(String s) {
+        int count = 0;
+        for(int i = 0;i < s.length() ;i ++){
+            count += expand(s,i,i);
+            count += expand(s,i,i + 1);
+        }
+        return count;
+    }
+    public int expand(String s,int i,int j){
+        int count = 0;
+        while(i >= 0 && j < s.length() && s.charAt(i) == s.charAt(j)){
+            count++;
+            i--;
+            j++;
+        }
+        return count;
+    }
+}
+```
+
+​         动态规划法：以i为首，j为尾的字符串（其中i <  j)如果是回文字符串，需要满足i位置的字符等于j位置的字符，且以i+1为首，j-1为尾的字符串也是回文字符。当然有两种特殊情况：1、i == j直接就是回文字符串；2、(i + 1) == (j - 1)只需比较i位置的字符是否等于j位置的字符。
+
+   
+
+```java
+class Solution{
+     public int countSubstrings(String s){
+          boolean[][] dp = new boolean[s.length()][s.length()];
+          getDPValue(s,dp);
+          int count = 0;
+          for(int i = 0;i < s.length();i ++){
+              for(int j = 0;j < s.length();j ++){
+                  if(dp[i][j]){
+                      count++;
+                  }
+              }
+          }
+          return count;
+     }
+     public void getDPValue(String s,boolean[][] dp){
+          for(int j = 0;j < s.length();j++){
+              for(int i = j;i >= 0;i--){
+                  if(i == j){
+                     dp[i][j] = true;
+                  }
+                  else{
+                     dp[i][j] = s.charAt(i) == s.charAt(j) &&(j == (i + 1) || dp[i + 1][j - 1]);
+                  }
+              }
+          }
+     }
 }
 ```
 
